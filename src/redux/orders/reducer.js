@@ -4,6 +4,7 @@ import {
   ERROR_FETCHING_ORDERS,
   SET_PAGE,
   SET_DATE,
+  SET_KEYWORD,
 } from "./constants";
 
 const statuslist = {
@@ -23,6 +24,7 @@ const initialState = {
     endDate: new Date(),
     key: "selection",
   },
+  keyword: "",
   status: statuslist.idle,
 };
 
@@ -52,6 +54,12 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         date: action.ranges,
+      };
+
+    case SET_KEYWORD:
+      return {
+        ...state,
+        keyword: action.keyword,
       };
 
     default:

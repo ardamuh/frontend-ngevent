@@ -1,10 +1,15 @@
-import React, { useEffect } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Col, Container, Row, Button } from "react-bootstrap";
 import BreadCrumb from "../../components/Breadcrumb";
 import Table from "../../components/TableWithAction";
 import SearchInput from "../../components/SearchInput";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchOrders, setPage, setDate } from "../../redux/orders/actions";
+import {
+  fetchOrders,
+  setPage,
+  setDate,
+  // setKeyword,
+} from "../../redux/orders/actions";
 import AlertMessage from "../../components/Alert";
 import { fetchListEvents } from "../../redux/lists/actions";
 import DateRange from "../../components/InputDate";
@@ -12,9 +17,11 @@ import { formatDate } from "../../utils/formatDate";
 
 function OrderPage() {
   const dispatch = useDispatch();
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   const notif = useSelector((state) => state.notif);
   const orders = useSelector((state) => state.orders);
+  // const events = useSelector((state) => state.events);
 
   let [isShowed, setIsShowed] = React.useState(false);
 
@@ -39,6 +46,23 @@ function OrderPage() {
     orders.date?.startDate ? formatDate(orders.date?.startDate) : ""
   }${orders.date?.endDate ? " - " + formatDate(orders.date.endDate) : ""}`;
 
+  // Fungsi untuk menangani perubahan input pencarian
+  const handleSearchChange = (e) => {
+    setSearchKeyword(e.target.value);
+  };
+
+  // Fungsi untuk menangani submit pencarian
+  const handleSearchSubmit = () => {
+    dispatch(
+      fetchOrders({
+        limit: 10,
+        page: 1,
+        keyword: searchKeyword,
+        // ... (other parameters if necessary)
+      })
+    );
+  };
+
   return (
     <Container className="mt-3">
       <BreadCrumb textSecound={"orders"} />
@@ -60,7 +84,20 @@ function OrderPage() {
         </Col>
         <Col></Col>
         <Col></Col>
+        <Col></Col>
       </Row>
+      {/*<Row className="mb-4">
+        <Col xs={12} md={6}>
+          <SearchInput
+            value={searchKeyword}
+            onChange={handleSearchChange}
+            placeholder="Search by event title..."
+          />
+        </Col>
+        <Col xs={12} md={6} className="text-right">
+          <Button onClick={handleSearchSubmit}>Search</Button>
+        </Col>
+      </Row>*/}
 
       {notif.status && (
         <AlertMessage type={notif.typeNotif} message={notif.message} />

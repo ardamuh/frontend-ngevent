@@ -8,14 +8,22 @@ import {
   START_FETCHING_LISTS_EVENTS,
   ERROR_FETCHING_LISTS_EVENTS,
   SUCCESS_FETCHING_LISTS_EVENTS,
-} from './constants';
+  START_FETCHING_LISTS_TICKETS,
+  SUCCESS_FETCHING_LISTS_TICKETS,
+  ERROR_FETCHING_LISTS_TICKETS,
+  START_FETCHING_LISTS_ORGANIZERS,
+  SUCCESS_FETCHING_LISTS_ORGANIZERS,
+  ERROR_FETCHING_LISTS_ORGANIZERS,
+} from "./constants";
 
-import { getData } from '../../utils/fetch';
-import debounce from 'debounce-promise';
+import { getData } from "../../utils/fetch";
+import debounce from "debounce-promise";
 
 let debouncedFetchListsCategories = debounce(getData, 1000);
 let debouncedFetchListsTalents = debounce(getData, 1000);
 let debouncedFetchListsEvents = debounce(getData, 1000);
+let debounceFetchListTickets = debounce(getData, 1000);
+let debounceFetchListOrganizers = debounce(getData, 1000);
 
 export const startFetchingListsCategories = () => {
   return {
@@ -41,7 +49,7 @@ export const fetchListCategories = () => {
     dispatch(startFetchingListsCategories());
 
     try {
-      let res = await debouncedFetchListsCategories('/cms/categories');
+      let res = await debouncedFetchListsCategories("/cms/categories");
 
       let _temp = [];
 
@@ -49,7 +57,7 @@ export const fetchListCategories = () => {
         _temp.push({
           value: res._id,
           label: res.name,
-          target: { value: res._id, name: 'category' },
+          target: { value: res._id, name: "category" },
         });
       });
 
@@ -88,7 +96,7 @@ export const fetchListTalents = () => {
     dispatch(startFetchingListsTalents());
 
     try {
-      let res = await debouncedFetchListsTalents('/cms/talents');
+      let res = await debouncedFetchListsTalents("/cms/talents");
 
       let _temp = [];
 
@@ -96,7 +104,7 @@ export const fetchListTalents = () => {
         _temp.push({
           value: res._id,
           label: res.name,
-          target: { value: res._id, name: 'talent' },
+          target: { value: res._id, name: "talent" },
         });
       });
 
@@ -137,7 +145,7 @@ export const fetchListEvents = () => {
     dispatch(startFetchingListsEvents());
 
     try {
-      let res = await debouncedFetchListsEvents('/cms/events');
+      let res = await debouncedFetchListsEvents("/cms/events");
 
       let _temp = [];
 
@@ -145,7 +153,7 @@ export const fetchListEvents = () => {
         _temp.push({
           value: res._id,
           label: res.title,
-          target: { value: res._id, name: 'event' },
+          target: { value: res._id, name: "event" },
         });
       });
 
@@ -156,6 +164,103 @@ export const fetchListEvents = () => {
       );
     } catch (error) {
       dispatch(errorFetchingListEvents());
+    }
+  };
+};
+
+// tickets
+export const startFetchingListTickets = () => {
+  return {
+    type: START_FETCHING_LISTS_TICKETS,
+  };
+};
+
+export const successFetchingListTickets = ({ tickets }) => {
+  return {
+    type: SUCCESS_FETCHING_LISTS_TICKETS,
+    tickets,
+  };
+};
+
+export const errorFetchingListTickets = () => {
+  return {
+    type: ERROR_FETCHING_LISTS_TICKETS,
+  };
+};
+
+export const fetchListTickets = () => {
+  return async (dispatch) => {
+    dispatch(startFetchingListTickets());
+
+    try {
+      let res = await debounceFetchListTickets("/cms/events");
+
+      let _temp = [];
+
+      res.data.data.forEach((res) => {
+        _temp.push({
+          value: res._id,
+          label: res.statusEvent,
+          target: { value: res._id, name: "statusEvent" },
+        });
+      });
+
+      dispatch(
+        successFetchingListTickets({
+          tickets: _temp,
+        })
+      );
+    } catch (error) {
+      dispatch(errorFetchingListTickets());
+    }
+  };
+};
+
+// organizers
+
+export const startFetchingListOrganizers = () => {
+  return {
+    type: START_FETCHING_LISTS_ORGANIZERS,
+  };
+};
+
+export const successFetchingListOrganizers = ({ organizers }) => {
+  return {
+    type: SUCCESS_FETCHING_LISTS_ORGANIZERS,
+    organizers,
+  };
+};
+
+export const errorFetchingListOrganizers = () => {
+  return {
+    type: ERROR_FETCHING_LISTS_ORGANIZERS,
+  };
+};
+
+export const fetchListOrganizers = () => {
+  return async (dispatch) => {
+    dispatch(startFetchingListOrganizers());
+
+    try {
+      let res = await debounceFetchListOrganizers("/cms/users");
+
+      let _temp = [];
+
+      res.data.data.forEach((res) => {
+        _temp.push({
+          name: res.name,
+          email: res.email,
+          password: res.password,
+        });
+      });
+
+      dispatch(
+        successFetchingListOrganizers({
+          organizers: _temp,
+        })
+      );
+    } catch (error) {
+      dispatch(errorFetchingListOrganizers());
     }
   };
 };

@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
-import { Card, Container } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import SAlert from '../../components/Alert';
-import SForm from './form';
-import { postData } from '../../utils/fetch';
-import { useDispatch } from 'react-redux';
-import { userLogin } from '../../redux/auth/actions';
+import React, { useState } from "react";
+import { Card, Container } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import SAlert from "../../components/Alert";
+import SForm from "./form";
+import { postData } from "../../utils/fetch";
+import { useDispatch } from "react-redux";
+import { userLogin } from "../../redux/auth/actions";
 
 function PageSignin() {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const [alert, setAlert] = useState({
     status: false,
-    message: '',
-    type: '',
+    message: "",
+    type: "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -42,25 +42,31 @@ function PageSignin() {
         )
       );
       setIsLoading(false);
-      navigate('/');
+      navigate("/");
     } else {
       setIsLoading(false);
       setAlert({
         status: true,
-        message: res?.response?.data?.msg ?? 'Internal server error',
-        type: 'danger',
+        message: res?.response?.data?.msg ?? "Internal server error",
+        type: "danger",
       });
     }
   };
 
   return (
-    <Container md={12} className='my-5'>
-      <div className='m-auto' style={{ width: '50%' }}>
-        {alert.status && <SAlert type={alert.type} message={alert.message} />}
-      </div>
-      <Card style={{ width: '50%' }} className='m-auto mt-5'>
+    <Container className="my-5 d-flex justify-content-center align-items-center">
+      <Card
+        style={{ width: "400px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}
+        className="border-0"
+      >
         <Card.Body>
-          <Card.Title className='text-center'>Form Signin</Card.Title>
+          <Card.Title
+            className="text-center mb-4"
+            style={{ fontSize: "2rem", fontWeight: "bold", color: "#007bff" }}
+          >
+            Sign In
+          </Card.Title>
+          {alert.status && <SAlert type={alert.type} message={alert.message} />}
           <SForm
             form={form}
             handleChange={handleChange}

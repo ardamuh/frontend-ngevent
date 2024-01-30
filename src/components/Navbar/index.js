@@ -6,6 +6,7 @@ import {
   accessCategories,
   accessTalents,
   accessEvents,
+  accessOrganizers,
   // accessParticipant,
   accessPayments,
   accessOrders,
@@ -64,13 +65,13 @@ function SNavbar() {
           >
             Payment
           </NavLink>
-          {/* <NavLink
+          <NavLink
             role={role}
-            roles={organizers.lihat}
-            action={() => navigate('/organizers')}
+            roles={accessOrganizers.lihat}
+            action={() => navigate("/organizers")}
           >
-            Oranizer
-          </NavLink> */}
+            Organizer
+          </NavLink>
           <NavLink
             role={role}
             roles={accessEvents.lihat}

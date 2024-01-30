@@ -8,13 +8,19 @@ import {
   START_FETCHING_LISTS_EVENTS,
   SUCCESS_FETCHING_LISTS_EVENTS,
   ERROR_FETCHING_LISTS_EVENTS,
-} from './constants';
+  START_FETCHING_LISTS_TICKETS,
+  ERROR_FETCHING_LISTS_TICKETS,
+  SUCCESS_FETCHING_LISTS_TICKETS,
+  START_FETCHING_LISTS_ORGANIZERS,
+  SUCCESS_FETCHING_LISTS_ORGANIZERS,
+  ERROR_FETCHING_LISTS_ORGANIZERS,
+} from "./constants";
 
 const statuslist = {
-  idle: 'idle',
-  process: 'process',
-  success: 'success',
-  error: 'error',
+  idle: "idle",
+  process: "process",
+  success: "success",
+  error: "error",
 };
 
 const initialState = {
@@ -24,6 +30,10 @@ const initialState = {
   statusTalents: statuslist.idle,
   events: [],
   statusEvents: statuslist.idle,
+  tickets: [],
+  statusTickets: statuslist.idle,
+  organizers: [],
+  statusOrganizers: statuslist.idle,
 };
 
 export default function reducer(state = initialState, action) {
@@ -65,6 +75,32 @@ export default function reducer(state = initialState, action) {
         ...state,
         statusEvents: statuslist.success,
         events: action.events,
+      };
+
+    case START_FETCHING_LISTS_TICKETS:
+      return { ...state, statusTickets: statuslist.process };
+
+    case ERROR_FETCHING_LISTS_TICKETS:
+      return { ...state, statusTickets: statuslist.error };
+
+    case SUCCESS_FETCHING_LISTS_TICKETS:
+      return {
+        ...state,
+        statusTickets: statuslist.success,
+        tickets: action.tickets,
+      };
+
+    case START_FETCHING_LISTS_ORGANIZERS:
+      return { ...state, statusOrganizers: statuslist.process };
+
+    case ERROR_FETCHING_LISTS_ORGANIZERS:
+      return { ...state, statusOrganizers: statuslist.error };
+
+    case SUCCESS_FETCHING_LISTS_ORGANIZERS:
+      return {
+        ...state,
+        statusOrganizers: statuslist.success,
+        organizers: action.organizers,
       };
 
     default:

@@ -4,6 +4,7 @@ import {
   ERROR_FETCHING_ORDERS,
   SET_DATE,
   SET_PAGE,
+  SET_KEYWORD,
 } from "./constants";
 
 import { getData } from "../../utils/fetch";
@@ -33,7 +34,7 @@ export const errorFetchingOrders = () => {
   };
 };
 
-export const fetchOrders = () => {
+export const fetchOrders = ({ keyword, ...restParams }) => {
   return async (dispatch, getState) => {
     dispatch(startFetchingOrders());
 
@@ -49,7 +50,12 @@ export const fetchOrders = () => {
           "YYYY-MM-DD"
         ),
         endDate: moment(getState().orders?.date?.endDate).format("YYYY-MM-DD"),
+        ...restParams,
       };
+
+      if (keyword && keyword.trim() !== "") {
+        params = { ...params, title: keyword }; // Ganti 'title' dengan nama parameter yang sesuai di API Anda
+      }
 
       let res = await debouncedFetchOrders("/cms/orders", params);
 
@@ -88,5 +94,12 @@ export const setDate = (ranges) => {
   return {
     type: SET_DATE,
     ranges,
+  };
+};
+
+export const setKeyword = (keyword) => {
+  return {
+    type: SET_KEYWORD,
+    keyword,
   };
 };
