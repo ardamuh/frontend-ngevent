@@ -5,23 +5,26 @@ import {
   SET_KEYWORD,
   SET_CATEGORY,
   SET_TALENT,
-} from './constants';
+} from "./constants";
 
+// Objek statuslist digunakan untuk menggambarkan status proses fetching event
 const statuslist = {
-  idle: 'idle',
-  process: 'process',
-  success: 'success',
-  error: 'error',
+  idle: "idle",
+  process: "process",
+  success: "success",
+  error: "error",
 };
 
+// Initial state untuk reducer ini
 const initialState = {
   data: [],
-  keyword: '',
-  talent: '',
-  category: '',
+  keyword: "",
+  talent: "",
+  category: "",
   status: statuslist.idle,
 };
 
+// Reducer untuk mengatur state terkait event
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case START_FETCHING_EVENTS:

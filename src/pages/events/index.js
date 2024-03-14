@@ -23,22 +23,23 @@ import {
 } from "../../redux/lists/actions";
 
 function EventPage() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const navigate = useNavigate(); // Hooks untuk navigasi halaman
+  const dispatch = useDispatch(); // Hooks untuk dispatch action Redux
 
-  const notif = useSelector((state) => state.notif);
-  const events = useSelector((state) => state.events);
-  const lists = useSelector((state) => state.lists);
-
-  useEffect(() => {
-    dispatch(fetchEvents());
-  }, [dispatch, events.keyword, events.category, events.talent]);
+  const notif = useSelector((state) => state.notif); // Mengambil state notifikasi dari Redux store
+  const events = useSelector((state) => state.events); // Mengambil state events dari Redux store
+  const lists = useSelector((state) => state.lists); // Mengambil state daftar kategori dan talent dari Redux store
 
   useEffect(() => {
-    dispatch(fetchListTalents());
-    dispatch(fetchListCategories());
-  }, [dispatch]);
+    dispatch(fetchEvents()); // Mengambil daftar events saat komponen dimuat
+  }, [dispatch, events.keyword, events.category, events.talent]); // Bergantung pada perubahan keyword, category, dan talent dalam state events
 
+  useEffect(() => {
+    dispatch(fetchListTalents()); // Mengambil daftar talent saat komponen dimuat
+    dispatch(fetchListCategories()); // Mengambil daftar kategori saat komponen dimuat
+  }, [dispatch]); // Bergantung pada perubahan state Redux
+
+  // Menghapus event berdasarkan ID
   const handleDelete = (id) => {
     Swal.fire({
       title: "Apa kamu yakin?",
@@ -51,7 +52,7 @@ function EventPage() {
       cancelButtonText: "Batal",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const res = await deleteData(`/cms/events/${id}`);
+        const res = await deleteData(`/cms/events/${id}`); // Mengirim permintaan DELETE ke backend
 
         dispatch(
           setNotif(
@@ -61,11 +62,12 @@ function EventPage() {
           )
         );
 
-        dispatch(fetchEvents());
+        dispatch(fetchEvents()); // Memuat kembali daftar events setelah menghapus
       }
     });
   };
 
+  // Mengubah status event berdasarkan ID
   const handleChangeStatus = (id, status) => {
     Swal.fire({
       title: "Apa kamu yakin?",
@@ -79,9 +81,9 @@ function EventPage() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const payload = {
-          statusEvent: status === "Published" ? "Draft" : "Published",
+          statusEvent: status === "Published" ? "Draft" : "Published", // Toggle status event antara Published dan Draft
         };
-        const res = await putData(`/cms/events/${id}/status`, payload);
+        const res = await putData(`/cms/events/${id}/status`, payload); // Mengirim permintaan PUT ke backend untuk mengubah status
 
         dispatch(
           setNotif(
@@ -89,8 +91,9 @@ function EventPage() {
             "success",
             `berhasil ubah status event ${res.data.data.title}`
           )
-        );
+        ); // Menampilkan notifikasi bahwa status event telah diubah
 
+        // Memuat kembali daftar events setelah mengubah status
         dispatch(fetchEvents());
       }
     });

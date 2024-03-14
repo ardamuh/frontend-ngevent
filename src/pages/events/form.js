@@ -110,7 +110,6 @@ export default function EventsForm({
           />
         </Col>
       </Row>
-
       <Row className="mb-3">
         <Form.Group as={Row} controlId="formMapEmbedCode">
           <Form.Label column sm={2}>
@@ -130,31 +129,33 @@ export default function EventsForm({
           </Row>
         </Form.Group>
       </Row>
-
-      <Form.Label>Key Point</Form.Label>
+      <Form.Label>Key Point</Form.Label> {/* Label untuk komponen key point */}
       <Row>
+        {/* Mapping melalui setiap elemen dalam array keyPoint */}
         {form.keyPoint.map((key, index) => (
           <Col sm={6}>
+            {/* Setiap key point direpresentasikan dalam sebuah input field */}
             <InputGroup className="mb-3" key={index}>
               <FormControl
-                placeholder="Masukan keypoint"
-                value={key}
-                type="text"
-                name="key"
+                placeholder="Masukan keypoint" // Placeholder untuk input key point
+                value={key} // Nilai input key point
+                type="text" // Tipe input sebagai teks
+                name="key" // Nama input
                 onChange={(e) => {
-                  handleChangeKeyPoint(e, index);
+                  handleChangeKeyPoint(e, index); // Memanggil fungsi handleChangeKeyPoint saat terjadi perubahan
                 }}
               />
+              {/* Tombol untuk menghapus key point hanya muncul jika index tidak sama dengan 0 */}
               {index !== 0 && (
                 <InputGroup.Text id="basic-addon2">
-                  <CloseButton onClick={() => handleMinusKeyPoint(index)} />
+                  <CloseButton onClick={() => handleMinusKeyPoint(index)} />{" "}
+                  {/* Tombol untuk menghapus key point */}
                 </InputGroup.Text>
               )}
             </InputGroup>
           </Col>
         ))}
       </Row>
-
       <Button
         className="mb-3"
         variant="success"
@@ -163,7 +164,6 @@ export default function EventsForm({
       >
         Tambah keypoint
       </Button>
-
       <Row>
         <Col>
           <SelectBox
@@ -201,9 +201,7 @@ export default function EventsForm({
           )}
         </Col>
       </Row>
-
       <Form.Label>Tiket</Form.Label>
-
       {form.tickets.map((tic, index) => (
         <Row>
           <Col sm={6}>
@@ -261,7 +259,6 @@ export default function EventsForm({
           Tambah Ticket
         </Button>
       </div>
-
       <Button variant="primary" action={handleSubmit} loading={isLoading}>
         {edit ? "Ubah" : "Simpan"}
       </Button>
